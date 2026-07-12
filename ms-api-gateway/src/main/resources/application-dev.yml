@@ -1,0 +1,10 @@
+# ── Perfil DEV (desarrollo local) ──
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9761/eureka
+
+logging:
+  level:
+    com.foodmarket.gateway: DEBUG
+    org.springframework.cloud.gateway: DEBUG

@@ -1,0 +1,180 @@
+server:
+  # Puerto anterior: 8080 | Puerto actual: 9090 (cambio debido a restricciones de duoc)
+  # alternativa para usar puerto 8080, cerrar operaciones de XAMPP
+  port: 9090
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        # Rutas publicas (sin JWT)    login y registro
+        - id: auth-service
+          uri: lb://ms-auth
+          predicates:
+            - Path=/auth/**
+
+        # Rutas protegidas (JWT validado por JwtAuthFilter) privadas y acceso mediante token
+        - id: user-service
+          uri: lb://ms-user
+          predicates:
+            - Path=/users/**
+
+        - id: restaurant-service
+          uri: lb://ms-restaurant
+          predicates:
+            - Path=/restaurants/**
+
+        - id: order-service
+          uri: lb://ms-order
+          predicates:
+            - Path=/orders/**
+
+        - id: payment-service
+          uri: lb://ms-payment
+          predicates:
+            - Path=/payments/**
+
+        - id: delivery-service
+          uri: lb://ms-delivery
+          predicates:
+            - Path=/deliveries/**
+
+        - id: notification-service
+          uri: lb://ms-notification
+          predicates:
+            - Path=/notifications/**
+
+        - id: review-service
+          uri: lb://ms-review
+          predicates:
+            - Path=/reviews/**
+
+        - id: search-service
+          uri: lb://ms-search
+          predicates:
+            - Path=/search/**
+
+        - id: report-service
+          uri: lb://ms-report
+          predicates:
+            - Path=/reports/**
+
+        # ── Rutas para Swagger unificado (proxy api-docs por servicio) ──
+        - id: auth-api-docs
+          uri: lb://ms-auth
+          predicates:
+            - Path=/v3/auth/api-docs
+          filters:
+            - RewritePath=/v3/auth/api-docs, /api-docs
+
+        - id: user-api-docs
+          uri: lb://ms-user
+          predicates:
+            - Path=/v3/user/api-docs
+          filters:
+            - RewritePath=/v3/user/api-docs, /api-docs
+
+        - id: restaurant-api-docs
+          uri: lb://ms-restaurant
+          predicates:
+            - Path=/v3/restaurant/api-docs
+          filters:
+            - RewritePath=/v3/restaurant/api-docs, /api-docs
+
+        - id: order-api-docs
+          uri: lb://ms-order
+          predicates:
+            - Path=/v3/order/api-docs
+          filters:
+            - RewritePath=/v3/order/api-docs, /api-docs
+
+        - id: payment-api-docs
+          uri: lb://ms-payment
+          predicates:
+            - Path=/v3/payment/api-docs
+          filters:
+            - RewritePath=/v3/payment/api-docs, /api-docs
+
+        - id: delivery-api-docs
+          uri: lb://ms-delivery
+          predicates:
+            - Path=/v3/delivery/api-docs
+          filters:
+            - RewritePath=/v3/delivery/api-docs, /api-docs
+
+        - id: notification-api-docs
+          uri: lb://ms-notification
+          predicates:
+            - Path=/v3/notification/api-docs
+          filters:
+            - RewritePath=/v3/notification/api-docs, /api-docs
+
+        - id: review-api-docs
+          uri: lb://ms-review
+          predicates:
+            - Path=/v3/review/api-docs
+          filters:
+            - RewritePath=/v3/review/api-docs, /api-docs
+
+        - id: search-api-docs
+          uri: lb://ms-search
+          predicates:
+            - Path=/v3/search/api-docs
+          filters:
+            - RewritePath=/v3/search/api-docs, /api-docs
+
+        - id: report-api-docs
+          uri: lb://ms-report
+          predicates:
+            - Path=/v3/report/api-docs
+          filters:
+            - RewritePath=/v3/report/api-docs, /api-docs
+
+# Clave JWT - IDENTICA a la del auth-service
+jwt:
+  secret: foodmarket-super-secret-key-2024-spring-boot-dsy1103
+
+eureka:
+  client:
+    service-url:
+      # Puerto anterior: 8761 | Puerto actual: 9761
+      defaultZone: http://localhost:9761/eureka
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ── Swagger Unificado ──
+# Acceso: http://localhost:9090/swagger-ui.html
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Autenticación (ms-auth)
+        url: /v3/auth/api-docs
+      - name: Usuarios (ms-user)
+        url: /v3/user/api-docs
+      - name: Restaurantes (ms-restaurant)
+        url: /v3/restaurant/api-docs
+      - name: Pedidos (ms-order)
+        url: /v3/order/api-docs
+      - name: Pagos (ms-payment)
+        url: /v3/payment/api-docs
+      - name: Entregas (ms-delivery)
+        url: /v3/delivery/api-docs
+      - name: Notificaciones (ms-notification)
+        url: /v3/notification/api-docs
+      - name: Reseñas (ms-review)
+        url: /v3/review/api-docs
+      - name: Búsqueda (ms-search)
+        url: /v3/search/api-docs
+      - name: Reportes (ms-report)
+        url: /v3/report/api-docs
+    urls-primary-name: Autenticación (ms-auth)
+    disable-swagger-default-url: true
