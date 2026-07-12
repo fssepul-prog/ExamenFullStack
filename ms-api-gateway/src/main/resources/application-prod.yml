@@ -1,0 +1,10 @@
+# ── Perfil PROD (Docker / producción) ──
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:9761/eureka
+
+logging:
+  level:
+    com.foodmarket.gateway: INFO
+    org.springframework.cloud.gateway: WARN
