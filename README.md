@@ -249,7 +249,7 @@ docker-compose up -d
 | Servicio | URL |
 |---|---|
 | Eureka Dashboard | http://localhost:9761 |
-| API Gateway | http://localhost:9090 |
+| API Gateway | http://localhost:9090/webjars/swagger-ui/index.html |
 
 > **Tip:** El API Gateway enruta todas las peticiones. Una vez que Eureka muestra los servicios como `UP`, el sistema está listo para recibir requests. El tiempo de estabilización completo es de aproximadamente 60–90 segundos.
 
